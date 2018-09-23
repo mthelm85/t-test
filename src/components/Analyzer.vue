@@ -42,7 +42,7 @@
           class="mt-3"
           :data="chartData"
           :download="true"
-          height="400px"
+          height="600px"
           ytitle="NAICS"
           :legend="false"></bar-chart>
       </div>
