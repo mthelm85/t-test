@@ -40,19 +40,37 @@
         <bar-chart
           :min="0"
           class="mt-3"
-          :data="chartData"
+          :data="violsPerCaseData"
           :download="true"
-          height="600px"
+          download="Violations Per Case"
+          :dataset="{ backgroundColor: '#9042ff', borderColor: '#632cb2' }"
+          height="450px"
+          xtitle="Violations / Case"
+          :refresh="5"
+          ytitle="NAICS"
+          :legend="false"></bar-chart>
+        <bar-chart
+          :min="0"
+          class="my-3"
+          :data="violRateData"
+          :download="true"
+          download="Violation Rate"
+          :dataset="{ backgroundColor: '#92f442', borderColor: '#78cc35' }"
+          height="450px"
+          suffix="%"
+          xtitle="Violation Rate"
           ytitle="NAICS"
           :legend="false"></bar-chart>
       </div>
     </div>
+    <NaicsDetail :naics="naicsProp"></NaicsDetail>
   </div>
 </template>
 
 <script>
 import jStat from 'jStat'
 import * as Papa from 'papaparse'
+import NaicsDetail from '@/components/NaicsDetail'
 export default {
   data () {
     return {
@@ -67,13 +85,25 @@ export default {
       hypMean: 5,
       proportionCutoff: .02,
       violRateCutoff: 0.8,
-      chartData: []
+      violsPerCaseData: [],
+      violRateData: []
     }
+  },
+
+  components: {
+    NaicsDetail
   },
 
   computed: {
     naicsCodesArray () {
       return [...this.naicsCodes]
+    },
+    naicsProp () {
+      let codes = []
+      for (let i = 0; i < this.goodNaics.length; i++) {
+        codes.push(this.goodNaics[i].naics)
+      }
+      return codes
     }
   },
 
@@ -113,10 +143,13 @@ export default {
         }
       }
       for (let i = 0; i < this.goodNaics.length; i++) {
-        this.chartData.push([
+        this.violsPerCaseData.push([
           this.goodNaics[i].naics,
-          this.goodNaics[i].violsPerCase.toFixed(2),
-          (this.goodNaics[i].violRate * 100).toFixed(2)
+          this.goodNaics[i].violsPerCase.toFixed(2)
+        ])
+        this.violRateData.push([
+          this.goodNaics[i].naics,
+          Math.round(this.goodNaics[i].violRate * 100)
         ])
       }
     }
