@@ -2,20 +2,28 @@
   <div class="container">
     <div class="row mt-3">
       <div class="col">
-        <span class="lead">First, set your parameters:</span>
+        <span class="lead"><strong>First, set your parameters:</strong></span>
         <b-form class="mt-3" inline @submit.prevent>
-          <label class="mr-2" for="hypothesis-mean">Hypothesis Mean</label>
-          <b-form-input id="hypothesis-mean" type="number" class="mr-2" v-model="hypMean" default="5"></b-form-input>
-          <label class="mr-2" for="viol-rate">Min Viol Rate</label>
-          <b-form-input id="viol-rate" type="number" class="mr-2" v-model="violRateCutoff" default="0.8"></b-form-input>
-          <label class="mr-2" for="proportion-cutoff">Max Proportion</label>
-          <b-form-input id="proportion-cutoff" type="number" class="mr-2" v-model="proportionCutoff" default="0.8"></b-form-input>
+          <div class="row">
+            <div class="col-sm">
+              <label for="hypothesis-mean">Hypothesis Mean</label>
+              <b-form-input id="hypothesis-mean" type="number" class="mt-2" v-model="hypMean" default="5"></b-form-input>
+            </div>
+            <div class="col-sm">
+              <label for="viol-rate">Min Violation Rate</label>
+              <b-form-input id="viol-rate" type="number" class="mt-2" v-model="violRateCutoff" default="0.8" step="0.05"></b-form-input>
+            </div>
+            <div class="col-sm">
+              <label for="proportion-cutoff">Max Proportion of All Cases</label>
+              <b-form-input id="proportion-cutoff" type="number" class="mt-2" v-model="proportionCutoff" default="0.02" step="0.01"></b-form-input>
+            </div>
+          </div>
         </b-form>
       </div>
     </div>
     <div class="row mt-3">
       <div class="col lead">
-        Then, upload your report and push the <span class="font-italic">Analyze</span> button:
+        <strong>Then, upload your report and push the <span class="font-italic">Analyze</span> button:</strong>
       </div>
     </div>
     <div class="row mt-3 d-flex justify-content-center">
@@ -23,20 +31,18 @@
         <b-form-file v-model="file" :state="Boolean(file)" placeholder="Choose a file..."></b-form-file>
       </div>
       <div class="col-2">
-        <button class="btn btn-dark" @click="analyze">Analyze</button>
+        <button class="btn btn-dark" @click="analyze" :disabled="file === null ? true : false">Analyze</button>
       </div>
     </div>
     <div class="row mt-3">
       <div class="col-12">
-        <span class="lead">Finally, view the results:</span>
+        <span class="lead"><strong>Finally, view the results:</strong></span>
         <bar-chart
           :min="0"
           class="mt-3"
           :data="chartData"
           :download="true"
-          :stacked="true"
           height="400px"
-          xtitle="Violations/Case"
           ytitle="NAICS"
           :legend="false"></bar-chart>
       </div>
